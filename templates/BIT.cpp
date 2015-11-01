@@ -7,9 +7,9 @@
 using namespace std;
 
 
-class BIT{
+class BIT {
 public:
-  int bit[NMAX + 1];
+  int bit[MAX_N + 1];
   int n;
 private:
 public:
@@ -19,28 +19,26 @@ public:
 private:
 };
 
-void BIT::init(int num){
-  int i = 0;
-
+void BIT::init (int num) {
   n = num;
-  for(i = 0; i <= n; i++){
+  for (int i = 0; i <= n; i++) {
     bit[i] = 0;
   }
-  return ;
+  return;
 }
 
-int BIT::sum(int i){
+int BIT::sum(int i) {
   int s = 0;
 
-  while(i > 0){
+  while (i > 0) {
     s += bit[i];
     i -= i & -i;
   }
   return s;
 }
 
-void BIT::add(int i, int x){
-  while(i <= n){
+void BIT::add(int i, int x) {
+  while (i <= n) {
     bit[i] += x;
     i += i & -i;
   }
