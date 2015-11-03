@@ -1,8 +1,9 @@
 *
 !*/
 !.gitignore
+!*.txt
 !*.c
 !*.h
 !*.cpp
 !*.hpp
-!*.txt
+!*.rb
