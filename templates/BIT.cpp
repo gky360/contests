@@ -19,7 +19,7 @@ public:
 private:
 };
 
-void BIT::init (int num) {
+void BIT::init(int num) {
   n = num;
   for (int i = 0; i <= n; i++) {
     bit[i] = 0;
