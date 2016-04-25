@@ -1,6 +1,5 @@
-// prim.cpp
-// 最小全域木のコストをプリム法で求める
-// グラフは隣接リスト型
+// AtCoder Indeedなう（オープンコンテストB）
+// D - Game on a Grid
 
 #include <cstdio>
 #include <cstring>
@@ -8,7 +7,9 @@
 #include <queue>
 #include <utility>
 #include <functional>
-#define MAX_V 1000
+#define MAX_W 100
+#define MAX_H 100
+#define MAX_V (MAX_W * MAX_H)
 using namespace std;
 
 
@@ -66,32 +67,46 @@ int Graph::prim()
   return cost;
 }
 
-int N;
-int M;
+int H, W;
+int sx, sy, gx, gy;
+int p[MAX_W][MAX_H];
+int dx[4] = { 0, 1, 0, -1 };
+int dy[4] = { -1, 0, 1, 0 };
 Graph G;
 int ans;
 
-int main()
-{
-  int a, b;
-  int cost;
-  int i;
+int main() {
 
-  scanf("%d %d", &N, &M);
-  G.V = N;
-  for(i = 0; i < M; i++){
-    scanf("%d %d %d", &a, &b, &cost);
-    G.add_edge(a - 1, b - 1, -cost);
-    G.add_edge(b - 1, a - 1, -cost);
+  int x, y;
+
+  scanf("%d%d", &H, &W);
+  scanf("%d%d", &sx, &sy);
+  scanf("%d%d", &gx, &gy);
+  ans = 0;
+  for (int j = 0; j < H; j++) {
+    for (int i = 0; i < W; i++) {
+      scanf("%d", &p[i][j]);
+      ans += p[i][j];
+    }
   }
 
-  ans = -G.prim();
-  if(ans == 0){
-    ans = -1;
+  for (int j = 0; j < H; j++) {
+    for (int i = 0; i < W; i++) {
+      for (int k = 0; k < 4; k++) {
+        x = i + dx[k];
+        y = j + dy[k];
+        if (x < 0 || W <= x || y < 0 || H <= y) {
+          continue;
+        }
+        G.add_edge(W * j + i, W * y + x, - p[i][j] * p[x][y]);
+      }
+    }
   }
+  ans += -G.prim();
 
   printf("%d\n", ans);
 
   return 0;
 }
+
 
