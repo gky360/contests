@@ -1,6 +1,6 @@
-//dijkstra.cpp
-//ƒ_ƒCƒNƒXƒgƒ‰–@(—LŒüƒOƒ‰ƒt—p)
-//ƒOƒ‰ƒt‚Í—×ÚƒŠƒXƒgŒ^
+// dijkstra.cpp
+// ãƒ€ã‚¤ã‚¯ã‚¹ãƒˆãƒ©æ³•(æœ‰å‘ã‚°ãƒ©ãƒ•ç”¨)
+// ã‚°ãƒ©ãƒ•ã¯éš£æ¥ãƒªã‚¹ãƒˆå‹
 
 #include <cstdio>
 #include <cstring>
@@ -13,56 +13,54 @@
 using namespace std;
 
 
-typedef pair<int, int> PAIR;	// first:cost, second:v_index
+typedef pair<int, int> PAIR;
 
 
-class Graph
-{
+class Graph {
 public:
-	void add_edge(int from, int to, int cost);
-	void dijkstra(int s);
-	int dist[MAX_V];
-	int V;	// ©‰Šú‰»–Y‚ê‚¸‚É
+  void add_edge(int from, int to, int cost); // æœ‰å‘è¾ºã‚’è¿½åŠ 
+  void dijkstra(int s);
+  int dist[MAX_V];
+  int V; // â†åˆæœŸåŒ–å¿˜ã‚Œãšã«
 private:
-	vector<PAIR> g[MAX_V];
+  vector<PAIR> g[MAX_V]; // cost, to
 };
 
-void Graph::add_edge(int from, int to, int cost)
-{
-	g[from].push_back(PAIR(cost, to));
-	return;
+void Graph::add_edge(int from, int to, int cost) {
+  g[from].push_back(PAIR(cost, to));
+  return;
 }
 
-void Graph::dijkstra(int s)
-{
-	priority_queue<PAIR, vector<PAIR>, greater<PAIR> > q;
-	PAIR p;	// first:cost, second:v_index
-	PAIR e;	// first:cost, second:v_index
-	int i;
+void Graph::dijkstra(int s) {
+  priority_queue<PAIR, vector<PAIR>, greater<PAIR> > q;
+  PAIR p, e;
 
-	fill(dist, dist + V, INF);
-	dist[s] = 0;
-	q.push(PAIR(dist[s], s));
-	while(!q.empty()){
-		p = q.top();
-		q.pop();
-		if(dist[p.second] < p.first){
-			continue;
-		}
-		for(i = 0; i < (int)g[p.second].size(); i++){
-			e = g[p.second][i];
-			if(dist[e.second] > dist[p.second] + e.first){
-				dist[e.second] = dist[p.second] + e.first;
-				q.push(PAIR(dist[e.second], e.second));
-			}
-		}
-	}
-	return;
+  fill(dist, dist + V, INF);
+  dist[s] = 0;
+  q.push(PAIR(dist[s], s));
+  while(!q.empty()){
+    p = q.top();
+    q.pop();
+    if (dist[p.second] < p.first) {
+      continue;
+    }
+    for (int i = 0; i < (int)g[p.second].size(); i++) {
+      e = g[p.second][i];
+      if (dist[e.second] > dist[p.second] + e.first) {
+        dist[e.second] = dist[p.second] + e.first;
+        q.push(PAIR(dist[e.second], e.second));
+      }
+    }
+  }
+  return;
 }
 
 
-int main()
-{
-	return 0;
+int main() {
+
+
+  return 0;
+
 }
+
 
