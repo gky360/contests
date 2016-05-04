@@ -3,23 +3,25 @@
 //int型 注意：添字1から
 
 #include <cstdio>
-#define NMAX 1000000
+#define MAX_BIT_IDX 1000000
 using namespace std;
 
 
+template <typename T>
 class BIT {
 public:
-  int bit[MAX_N + 1];
+  T bit[MAX_BIT_IDX + 1];
   int n;
 private:
 public:
   void init(int num);
-  int sum(int i);
-  void add(int i, int x);
+  T sum(int i);
+  void add(int i, T x);
 private:
 };
 
-void BIT::init(int num) {
+template <typename T>
+void BIT<T>::init(int num) {
   n = num;
   for (int i = 0; i <= n; i++) {
     bit[i] = 0;
@@ -27,8 +29,9 @@ void BIT::init(int num) {
   return;
 }
 
-int BIT::sum(int i) {
-  int s = 0;
+template <typename T>
+T BIT<T>::sum(int i) {
+  T s = 0;
 
   while (i > 0) {
     s += bit[i];
@@ -37,7 +40,8 @@ int BIT::sum(int i) {
   return s;
 }
 
-void BIT::add(int i, int x) {
+template <typename T>
+void BIT<T>::add(int i, T x) {
   while (i <= n) {
     bit[i] += x;
     i += i & -i;
@@ -45,6 +49,8 @@ void BIT::add(int i, int x) {
   return;
 }
 
+
+BIT<int> bit;
 
 int main(){
 
