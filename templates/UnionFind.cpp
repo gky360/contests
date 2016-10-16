@@ -1,4 +1,4 @@
-﻿// UnionFind.cpp
+// UnionFind.cpp
 // UnionFind木用クラス
 // int型
 
