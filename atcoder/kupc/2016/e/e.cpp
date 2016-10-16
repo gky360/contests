@@ -1,13 +1,14 @@
-// max_flow.cpp
-// 最大流を求める
-// グラフは隣接リスト型
+// Kyoto University Programming Contest 2016
+// E - 柵 / Fences
 
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
 #include <vector>
 #include <queue>
-#define MAX_V 100
+#define MAX_H 100
+#define MAX_W 100
+#define MAX_V (MAX_H * MAX_W * 2 + 2)
 #define INF 100000000
 using namespace std;
 
@@ -94,7 +95,47 @@ int Graph::dfs(int v, int t, int f) {
 }
 
 
+int H, W;
+Graph G;
+int dy[4] = { -1, 0, 1, 0 };
+int dx[4] = { 0, 1, 0, -1 };
+const int S = MAX_H * MAX_W * 2 + 0;
+const int T = MAX_H * MAX_W * 2 + 1;
+int ans;
+
 int main() {
+
+  int y, x;
+  char buff[MAX_W + 2];
+
+  scanf("%d%d", &H, &W);
+  for (int i = 0; i < H; i++) {
+    scanf("%s", buff);
+    for (int j = 0; j < W; j++) {
+      if (buff[j] == 'X') {
+        G.add_edge(S, (i * W + j) * 2 + 0, INF);
+        G.add_edge((i * W + j) * 2 + 0, (i * W + j) * 2 + 1, INF);
+      } else {
+        G.add_edge((i * W + j) * 2 + 0, (i * W + j) * 2 + 1, 1);
+      }
+      for (int k = 0; k < 4; k++) {
+        y = i + dy[k];
+        x = j + dx[k];
+        if (y < 0 || H <= y || x < 0 || W <= x) {
+          G.add_edge((i * W + j) * 2 + 1, T, INF);
+        } else {
+          G.add_edge((i * W + j) * 2 + 1, (y * W + x) * 2 + 0, INF);
+        }
+      }
+    }
+  }
+
+  ans = G.max_flow(S, T);
+  ans = ans >= INF ? -1 : ans;
+  printf("%d\n", ans);
+
   return 0;
+
 }
+
 
