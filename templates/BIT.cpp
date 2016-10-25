@@ -1,6 +1,6 @@
-//BIT.cpp
-//BinaryIndexedTree
-//int型 注意：添字1から
+// BIT.cpp
+// BinaryIndexedTree
+// int型 注意：添字1から
 
 #include <cstdio>
 #define MAX_BIT_IDX 1000000
@@ -10,7 +10,7 @@ using namespace std;
 template <typename T>
 class BIT {
 public:
-  T bit[MAX_BIT_IDX + 1];
+  T b[MAX_BIT_IDX + 1];
   int n;
 private:
 public:
@@ -24,7 +24,7 @@ template <typename T>
 void BIT<T>::init(int num) {
   n = num;
   for (int i = 0; i <= n; i++) {
-    bit[i] = 0;
+    b[i] = 0;
   }
   return;
 }
@@ -33,18 +33,16 @@ template <typename T>
 T BIT<T>::sum(int i) {
   T s = 0;
 
-  while (i > 0) {
-    s += bit[i];
-    i -= i & -i;
+  for (; i > 0; i -= i & -i) {
+    s += b[i];
   }
   return s;
 }
 
 template <typename T>
 void BIT<T>::add(int i, T x) {
-  while (i <= n) {
-    bit[i] += x;
-    i += i & -i;
+  for (; i <= n; i += i & -i) {
+    b[i] += x;
   }
   return;
 }
