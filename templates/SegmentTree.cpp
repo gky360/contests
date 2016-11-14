@@ -2,7 +2,7 @@
 
 #include <cstdio>
 #include <algorithm>
-#define MAX_ELEMENTS (1 << 11)
+#define MAX_ELEMENTS (1 << 17)
 #define INF 1000000000
 using namespace std;
 
@@ -14,8 +14,9 @@ public:
   T dat[2 * MAX_ELEMENTS - 1];
   void init(int _n);
   void update(int k, T a);
+  T query(int a, int b);
+private:
   T query(int a, int b, int k, int l, int r);
-  T query(int a, int b, int k);
 };
 
 template <typename T>
@@ -41,21 +42,21 @@ void SegmentTree<T>::update(int k, T a) {
   return;
 }
 
+template <typename T>
+T SegmentTree<T>::query(int a, int b) {
+  return query(a, b, 0, 0, n);
+}
+
 // [a, b), [l, r)
 template <typename T>
 T SegmentTree<T>::query(int a, int b, int k, int l, int r) {
   if (r <= a || b <= l) {
     return INF;
   }
-  if (a <= l && b <= r) {
+  if (a <= l && r <= b) {
     return dat[k];
   }
   return min(query(a, b, k * 2 + 1, l, (l + r) / 2), query(a, b, k * 2 + 2, (l + r) / 2, r));
-}
-
-template <typename T>
-T SegmentTree<T>::query(int a, int b, int k) {
-  return query(a, b, k, 0, n);
 }
 
 int main() {
