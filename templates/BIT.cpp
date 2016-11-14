@@ -12,12 +12,9 @@ class BIT {
 public:
   T b[MAX_BIT_IDX + 1];
   int n;
-private:
-public:
   void init(int num);
   T sum(int i);
   void add(int i, T x);
-private:
 };
 
 template <typename T>
