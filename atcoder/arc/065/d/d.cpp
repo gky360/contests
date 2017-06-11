@@ -1,62 +1,41 @@
 // AtCoder Regular Contest 065
 // D - 連結 / Connectivity
 
-#include <cstdio>
-#include <map>
+#include <bits/stdc++.h>
 using namespace std;
 typedef long long int ll;
 typedef pair<int, int> PII;
 
 
-const int MAX_N = 200000;
-
-
-class UnionFind{
+class UnionFind {
     public:
-        void init(int n);
-        void unite(int a, int b);
-        bool same(int a, int b);
-        int root(int a);
-    private:
-        int par[MAX_N];
-        int rank[MAX_N];
-};
-
-void UnionFind::init(int n) {
-    for (int i = 0; i < n; i++) {
-        par[i] = i;
-        rank[i] = 0;
-    }
-    return;
-}
-
-void UnionFind::unite(int a, int b) {
-    a = root(a);
-    b = root(b);
-    if (a == b) {
-        return;
-    }
-    if (rank[a] < rank[b]) {
-        par[a] = b;
-    } else {
-        par[b] = a;
-        if (rank[a] == rank[b]) {
-            rank[a]++;
+        vector<int> data;
+        void init(int size) {
+            data = vector<int>(size, -1);
         }
-    }
-    return;
-}
+        bool unite(int x, int y) {
+            x = root(x); y = root(y);
+            if (x == y) {
+                return false;
+            }
+            if (data[y] < data[x]) {
+                swap(x, y);
+            }
+            data[x] += data[y];
+            data[y] = x;
 
-bool UnionFind::same(int a, int b) {
-    return root(a) == root(b);
-}
-
-int UnionFind::root(int a) {
-    if (par[a] != a) {
-        par[a] = root(par[a]);
-    }
-    return par[a];
-}
+            return true;
+        }
+        bool same(int x, int y) {
+            return root(x) == root(y);
+        }
+        int root(int x) {
+            return data[x] < 0 ? x : data[x] = root(data[x]);
+        }
+        int size(int x) {
+            return -data[root(x)];
+        }
+};
 
 
 int N, KL[2];
