@@ -1,10 +1,14 @@
-// UnionFind.cpp
-// UnionFind木用クラス
-// int型
+// AtCoder Regular Contest 065
+// D - 連結 / Connectivity
 
 #include <cstdio>
-#define MAX_N 1000000
+#include <map>
 using namespace std;
+typedef long long int ll;
+typedef pair<int, int> PII;
+
+
+const int MAX_N = 200000;
 
 
 class UnionFind{
@@ -12,8 +16,8 @@ class UnionFind{
         void init(int n);
         void unite(int a, int b);
         bool same(int a, int b);
-    private:
         int root(int a);
+    private:
         int par[MAX_N];
         int rank[MAX_N];
 };
@@ -55,10 +59,37 @@ int UnionFind::root(int a) {
 }
 
 
+int N, KL[2];
+UnionFind uf[2];
+map<PII, int> mp;
+
 int main() {
 
+    PII p;
+    int a, b;
+
+    scanf("%d%d%d", &N, &KL[0], &KL[1]);
+    for (int j = 0; j < 2; j++) {
+        uf[j].init(N);
+        for (int i = 0; i < KL[j]; i++) {
+            scanf("%d%d", &a, &b);
+            uf[j].unite(a - 1, b - 1);
+        }
+    }
+
+    for (int i = 0; i < N; i++) {
+        p = PII(uf[0].root(i), uf[1].root(i));
+        mp[p] = mp[p] + 1;
+    }
+
+    for (int i = 0; i < N; i++) {
+        p = PII(uf[0].root(i), uf[1].root(i));
+        printf("%d%c", mp[p], i == N - 1 ? '\n' : ' ');
+    }
 
     return 0;
 
 }
+
+
 
