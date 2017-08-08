@@ -1,17 +1,17 @@
-// min_cost_flow.cpp
-// 最小費用流を求める
-// グラフは隣接リスト型
+// AtCoder Grand Contest 018
+// C - Coins
 
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <queue>
-#include <utility>
-#define MAX_V 100
-#define INF 100000000
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef pair<ll, int> pli;
 
+
+const int MAX_N = 100000;
+const ll MAX_A = (ll)1e9;
+const int MAX_V = MAX_N + 5;
+const ll INF = (ll)1e16;
 
 template <typename T>
 struct edge{
@@ -93,7 +93,34 @@ T Graph<T>::min_cost_flow(int s, int t, int f) {
 }
 
 
-int main(){
+int X, Y, Z;
+int N;
+Graph<ll> g;
+
+int main() {
+
+    ll a, b, c;
+    ll ans;
+
+    cin >> X >> Y >> Z;
+    N = X + Y + Z;
+    for (int i = 0; i < N; i++) {
+        cin >> a >> b >> c;
+        g.add_edge(N + 3, i, 1, 0);
+        g.add_edge(i, N + 0, 1, MAX_A - a);
+        g.add_edge(i, N + 1, 1, MAX_A - b);
+        g.add_edge(i, N + 2, 1, MAX_A - c);
+    }
+    g.add_edge(N + 0, N + 4, X, 0);
+    g.add_edge(N + 1, N + 4, Y, 0);
+    g.add_edge(N + 2, N + 4, Z, 0);
+
+    ans = MAX_A * N - g.min_cost_flow(N + 3, N + 4, N);
+    cout << ans << endl;
+
     return 0;
+
 }
+
+
 
