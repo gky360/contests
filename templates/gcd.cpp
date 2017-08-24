@@ -1,5 +1,4 @@
 // gcd.cpp
-// gcd 関連テンプレート
 
 
 int gcd(int a, int b) {
@@ -20,7 +19,7 @@ int extgcd(int a, int b, int& x, int& y) {
   return d;
 }
 
-int mod_inverse(int a, int m) {
+int mod_inv(int a, int m) {
   int x, y;
   extgcd(a, m, x, y);
   return (m + x) % m;
