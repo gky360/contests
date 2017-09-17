@@ -7,4 +7,6 @@
 !*.cpp
 !*.hpp
 !*.rb
+!*.py
 !*.md
+!submission.csv
