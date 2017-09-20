@@ -1,4 +1,6 @@
 import argparse
+from datetime import datetime
+import string
 import sys
 import time
 
@@ -17,6 +19,8 @@ from chainercv.utils.iterator import apply_prediction_to_iterator
 from dataset import Dataset
 
 
+EPS = np.finfo(np.float32).eps
+
 class ProgressHook(object):
 
     def __init__(self, n_total):
@@ -33,15 +37,19 @@ class ProgressHook(object):
         sys.stdout.flush()
 
 
-def predict_label(pred_label_list):
+def predict_probability(pred_label_list):
     cat_cnt = len(np.where(pred_label_list == Dataset.labels[0])[0])
     dog_cnt = len(np.where(pred_label_list == Dataset.labels[1])[0])
-    if (cat_cnt > 0) != (dog_cnt > 0):
-        pred_label = 0 if cat_cnt > 0 else 1
+    if cat_cnt == dog_cnt:
+        print('not sure')
+        pred_prob = 0.5
+    elif cat_cnt > dog_cnt:
+        # cat
+        pred_prob = EPS
     else:
-        print('random')
-        pred_label = np.random.randint(2)
-    return pred_label
+        # dog
+        pred_prob = 1 - EPS
+    return pred_prob
 
 
 def main():
@@ -52,8 +60,10 @@ def main():
         '--model', choices=('ssd300', 'ssd512'), default='ssd300')
     parser.add_argument('--split', choices=('train', 'test'), default='train')
     parser.add_argument('--gpu', type=int, default=-1)
-    parser.add_argument('--batchsize', type=int, default=32)
+    parser.add_argument('--batchsize', type=int, default=16)
     parser.add_argument('--pretrained_model', default='voc0712')
+    parser.add_argument('--begin', type=int, default=0)
+    parser.add_argument('--end', type=int, default=-1)
     args = parser.parse_args()
 
     if args.model == 'ssd300':
@@ -69,14 +79,12 @@ def main():
         chainer.cuda.get_device(args.gpu).use()
         model.to_gpu()
 
-    train = Dataset()
-    train_iter = chainer.iterators.MultiprocessIterator(
-        train, args.batchsize, repeat=False, shuffle=False,
-        n_processes=4, shared_mem=300000000)
-    test = Dataset(split='test')
-    test_iter = chainer.iterators.MultiprocessIterator(
-        test, args.batchsize, repeat=False, shuffle=False,
-        n_processes=4, shared_mem=300000000)
+    train = Dataset(begin=args.begin, end=args.end)
+    train_iter = chainer.iterators.SerialIterator(
+        train, args.batchsize, repeat=False, shuffle=False)
+    test = Dataset(split='test', begin=args.begin, end=args.end)
+    test_iter = chainer.iterators.SerialIterator(
+        test, args.batchsize, repeat=False, shuffle=False)
 
     print('Model has been prepared. Evaluation starts.')
     if args.split == 'train':
@@ -95,18 +103,23 @@ def main():
     if args.split == 'train':
         for pred_label_list, gt_label, i in zip(
                 pred_labels, gt_labels, range(len(train))):
-            pred_label = predict_label(pred_label_list)
-            res_txt = 'o' if pred_label == gt_label else 'x'
-            print('{0:>5}: {1:>2} {2:>2} {3}'.format(
-                i, pred_label, gt_label, res_txt))
+            idx = i + test.begin
+            pred_prob = predict_probability(pred_label_list)
+            res_txt = 'o' if round(pred_prob) == gt_label else 'x'
+            print('{0:>5}: {1:>2}\t{2:>2} {3}'.format(
+                idx // 2, pred_prob, gt_label, res_txt))
     else:
-        data = np.zeros((len(test), 2), dtype=np.int32)
+        d_str = datetime.now().strftime('%Y%m%d%H%M%S')
+        file_name = 'result/submission_{}_{:>5}_{:>5}.csv'.format(
+            d_str, test.begin, test.end)
+        data = np.zeros((len(test), 2))
         for pred_label_list, i in zip(pred_labels, range(len(test))):
-            pred_label = predict_label(pred_label_list)
-            data[i, 0] = i + 1
-            data[i, 1] = pred_label
-            np.savetxt('result/submission.csv', data[:(i + 1)],
-                       delimiter=',', header='id,label', fmt='%d')
+            idx = i + test.begin
+            pred_prob = predict_probability(pred_label_list)
+            data[i, 0] = idx + 1
+            data[i, 1] = pred_prob
+            np.savetxt(file_name, data[:(i + 1)], delimiter=',',
+                       header='id,label', fmt='%d')
 
 
 if __name__ == '__main__':

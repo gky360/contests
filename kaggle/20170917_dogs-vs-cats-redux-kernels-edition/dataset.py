@@ -12,21 +12,29 @@ class Dataset(chainer.dataset.DatasetMixin):
     labels = list(map(
         lambda ln: voc_detection_label_names.index(ln), label_names))
 
-    def __init__(self, split='train', data_dir='data'):
+    def __init__(self, split='train', data_dir='data',
+                 begin=0, end=-1):
         super().__init__()
         self.train = (split == 'train')
         self.data_path = os.path.join(data_dir, split)
         self.file_pattern = '{}.{}.jpg' if self.train else '{}.jpg'
         file_paths = glob.glob(
             os.path.join(self.data_path, '*.jpg'))
-        self.length = len(file_paths)
+        begin = max(0, begin)
+        if end < 0:
+            end = len(file_paths)
+        else:
+            end = min(len(file_paths), end)
+        self.begin = begin
+        self.end = end
+        self.length = end - begin
 
     def __len__(self):
         return self.length
-        # return 4
 
     def get_example(self, i):
         label = -1
+        i += self.begin
 
         if self.train:
             label_name = self.label_names[i % 2]
