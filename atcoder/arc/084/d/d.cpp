@@ -1,17 +1,15 @@
-// dijkstra.cpp
-// ダイクストラ法(有向グラフ用)
-// グラフは隣接リスト型
+// ARC084
+// D - Small Multiple
 
-#include <cstdio>
-#include <functional>
-#include <queue>
-#include <utility>
-#include <vector>
-#define MAX_V 1000
-#define INF 100000000
+#include <bits/stdc++.h>
 using namespace std;
-
+typedef long long int ll;
 typedef pair<int, int> pii;
+typedef pair<ll, int> pli;
+
+const int MAX_K = 100000;
+const int MAX_V = MAX_K;
+const int INF = 1e9;
 
 class Graph {
 public:
@@ -52,4 +50,20 @@ void Graph::dijkstra(int s) {
     return;
 }
 
-int main() { return 0; }
+int K;
+Graph g;
+
+int main() {
+    cin >> K;
+
+    g.V = K;
+    for (int i = 0; i < K; i++) {
+        g.add_edge(i, (i + 1) % K, 1);
+        g.add_edge(i, (i * 10) % K, 0);
+    }
+    g.dijkstra(1);
+
+    cout << g.dist[0] + 1 << endl;
+
+    return 0;
+}
