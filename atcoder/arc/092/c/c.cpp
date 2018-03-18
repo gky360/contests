@@ -1,17 +1,18 @@
-// max_flow.cpp
+// ARC092
+// C - 2D Plane 2N Points
 
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <queue>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef pair<ll, int> pli;
 
-const int MAX_V = 10000;
+const int MAX_N = 100;
+const int MAX_V = MAX_N * 2 + 2;
 const int INF = 1e9;
 
 struct edge {
-    int to, cap, rev;
+    int to, cap, rev;  // 行き先, 容量, 逆辺番号
 };
 
 class Graph {
@@ -93,4 +94,37 @@ int Graph::dfs(int v, int t, int f) {
     return 0;
 }
 
-int main() { return 0; }
+int N;
+int a[MAX_N], b[MAX_N], c[MAX_N], d[MAX_N];
+Graph g;
+
+int main() {
+    cin >> N;
+    for (int i = 0; i < N; i++) {
+        cin >> a[i] >> b[i];
+    }
+    for (int i = 0; i < N; i++) {
+        cin >> c[i] >> d[i];
+    }
+
+    int s = 2 * N;
+    int t = 2 * N + 1;
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (a[i] < c[j] && b[i] < d[j]) {
+                g.add_edge(i, j + N, 1);
+            }
+        }
+    }
+    for (int i = 0; i < N; i++) {
+        g.add_edge(s, i, 1);
+        g.add_edge(i + N, t, 1);
+    }
+
+    int ans = g.max_flow(s, t);
+
+    cout << ans << endl;
+
+    return 0;
+}
