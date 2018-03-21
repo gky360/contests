@@ -1,15 +1,15 @@
-// max_flow.cpp
+// ARC085
+// E - MUL
 
-#include <algorithm>
-#include <cstdio>
-#include <cstring>
-#include <queue>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long int ll;
+typedef pair<int, int> pii;
+typedef pair<ll, int> pli;
 
-const int MAX_V = 10000;
-const int INF = 1e9;
-// const ll INF = 1e18;
+const int MAX_N = 100;
+const int MAX_V = MAX_N + 2;
+const ll INF = 1e18;
 
 template <typename T>
 struct edge {
@@ -100,4 +100,31 @@ T Graph<T>::dfs(int v, int t, T f) {
     return 0;
 }
 
-int main() { return 0; }
+int N;
+Graph<ll> g;
+
+int main() {
+    cin >> N;
+
+    int S = 0;
+    int T = N + 1;
+    ll ans = 0;
+    for (int i = 1; i <= N; i++) {
+        ll a;
+        cin >> a;
+        if (a < 0) {
+            g.add_edge(S, i, -a);
+        } else {
+            ans += a;
+            g.add_edge(i, T, a);
+        }
+        for (int j = 2 * i; j <= N; j += i) {
+            g.add_edge(i, j, INF);
+        }
+    }
+
+    ans -= g.max_flow(S, T);
+    cout << ans << endl;
+
+    return 0;
+}
