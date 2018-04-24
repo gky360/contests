@@ -7,34 +7,34 @@
 #include <queue>
 #include <utility>
 #include <vector>
-#define MAX_V 1000
-#define INF 100000000
 using namespace std;
 
-typedef pair<int, int> pii;
+typedef long long int ll;
+typedef pair<ll, int> pli;
+
+const int MAX_V = 10000;
+const ll INF = 1e18;
 
 class Graph {
 public:
-    void add_edge(int from, int to, int cost);  // 有向辺を追加
+    ll dist[MAX_V];
+    vector<pli> g[MAX_V];  // cost, to
+    void add_edge(int from, int to, ll cost);
     void dijkstra(int s);
-    int dist[MAX_V];
-    int V;  // <- 初期化忘れずに
-private:
-    vector<pii> g[MAX_V];  // cost, to
 };
 
-void Graph::add_edge(int from, int to, int cost) {
-    g[from].push_back(pii(cost, to));
+void Graph::add_edge(int from, int to, ll cost) {
+    g[from].push_back(pli(cost, to));
     return;
 }
 
 void Graph::dijkstra(int s) {
-    priority_queue<pii, vector<pii>, greater<pii> > q;
-    pii p, e;
+    priority_queue<pli, vector<pli>, greater<pli>> q;
+    pli p, e;
 
-    fill(dist, dist + V, INF);
+    fill(dist, dist + MAX_V, INF);
     dist[s] = 0;
-    q.push(pii(dist[s], s));
+    q.push(pli(dist[s], s));
     while (!q.empty()) {
         p = q.top();
         q.pop();
@@ -45,7 +45,7 @@ void Graph::dijkstra(int s) {
             e = g[p.second][i];
             if (dist[e.second] > dist[p.second] + e.first) {
                 dist[e.second] = dist[p.second] + e.first;
-                q.push(pii(dist[e.second], e.second));
+                q.push(pli(dist[e.second], e.second));
             }
         }
     }
