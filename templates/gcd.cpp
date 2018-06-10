@@ -1,10 +1,12 @@
 // gcd.cpp
+#include <algorithm>
+using namespace std;
 
 int gcd(int a, int b) {
-    if (b == 0) {
-        return a;
+    while (a > 0) {
+        swap(a, b %= a);
     }
-    return gcd(b, a % b);
+    return b;
 }
 
 int extgcd(int a, int b, int& x, int& y) {
