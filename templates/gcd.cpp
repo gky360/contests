@@ -3,10 +3,10 @@
 using namespace std;
 
 int gcd(int a, int b) {
-    while (a > 0) {
-        swap(a, b %= a);
+    while (b > 0) {
+        swap(b, a %= b);
     }
-    return b;
+    return a;
 }
 
 int extgcd(int a, int b, int& x, int& y) {
