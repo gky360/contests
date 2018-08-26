@@ -4,6 +4,8 @@
 !*.txt
 *.in.txt
 *.out.txt
+**/in/*.txt
+**/out/*.txt
 !*.c
 !*.h
 !*.cpp
