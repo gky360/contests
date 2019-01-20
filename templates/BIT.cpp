@@ -12,7 +12,7 @@ public:
     T b[MAX_BIT_IDX + 1];
     int n;
     void init(int num);
-    T sum(int i);          // i : [0, n)
+    T sum(int i);          // i : [0, n), returns sum of [0, i)
     void add(int i, T x);  // i : [0, n)
 };
 
@@ -29,7 +29,7 @@ template <typename T>
 T BIT<T>::sum(int i) {
     T s = 0;
 
-    for (i += 1; i > 0; i -= i & -i) {
+    for (; i > 0; i -= i & -i) {
         s += b[i];
     }
     return s;
