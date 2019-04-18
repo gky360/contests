@@ -6,8 +6,7 @@ typedef long long int ll;
 typedef pair<int, int> pii;
 typedef pair<ll, int> pli;
 
-
-const int INF = (int)1e8;
+const int INF = 1e9;
 
 template <typename T>
 class RMQ {
@@ -17,6 +16,7 @@ public:
     void init(int _n);
     void update(int k, T a);
     T query(int a, int b);
+
 private:
     T query(int a, int b, int k, int l, int r);
 };
@@ -59,17 +59,8 @@ T RMQ<T>::query(int a, int b, int k, int l, int r) {
     if (a <= l && r <= b) {
         return dat[k];
     }
-    return min(query(a, b, k * 2 + 1, l, (l + r) / 2), query(a, b, k * 2 + 2, (l + r) / 2, r));
+    return min(query(a, b, k * 2 + 1, l, (l + r) / 2),
+               query(a, b, k * 2 + 2, (l + r) / 2, r));
 }
 
-
-int main() {
-
-
-
-    return 0;
-
-}
-
-
-
+int main() { return 0; }
