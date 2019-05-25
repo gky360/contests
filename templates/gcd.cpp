@@ -3,20 +3,20 @@
 using namespace std;
 typedef long long int ll;
 
-int gcd(int a, int b) {
+ll gcd(ll a, ll b) {
     while (b > 0) {
         swap(b, a %= b);
     }
     return a;
 }
 
-ll lcm(int a, int b) {
-    int d = gcd(a, b);
+ll lcm(ll a, ll b) {
+    ll d = gcd(a, b);
     return (ll)a * b / d;
 }
 
-int extgcd(int a, int b, int& x, int& y) {
-    int d = a;
+ll extgcd(ll a, ll b, ll& x, ll& y) {
+    ll d = a;
     if (b != 0) {
         d = extgcd(b, a % b, y, x);
         y -= (a / b) * x;
@@ -27,8 +27,8 @@ int extgcd(int a, int b, int& x, int& y) {
     return d;
 }
 
-int mod_inv(int a, int m) {
-    int x, y;
+ll mod_inv(ll a, ll m) {
+    ll x, y;
     extgcd(a, m, x, y);
     return (m + x) % m;
 }
