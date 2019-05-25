@@ -32,29 +32,26 @@ ll C[MAX_M];
 map<ll, int> m;
 
 ll solve() {
-    for (int i = 0; i < N; i++) {
-        m[A[i]]++;
-    }
-
+    vector<pli> cb;
     for (int i = 0; i < M; i++) {
-        int b = B[i];
-        while (b > 0 && m.begin()->first < C[i]) {
-            auto &p = *m.begin();
-            int d = min(b, p.second);
-            b -= d;
-            if (p.second - d == 0) {
-                m.erase(p.first);
-            } else {
-                p.second -= d;
-            }
-            m[C[i]] += d;
+        cb.emplace_back(C[i], B[i]);
+    }
+    for (int i = 0; i < N; i++) {
+        cb.emplace_back(A[i], 1);
+    }
+    sort(cb.begin(), cb.end());
+
+    int rem = N;
+    ll ans = 0;
+    for (int i = cb.size() - 1; i >= 0; i--) {
+        if (rem <= 0) {
+            break;
         }
+        int d = min(rem, cb[i].second);
+        ans += cb[i].first * d;
+        rem -= d;
     }
 
-    ll ans = 0;
-    for (auto &p : m) {
-        ans += p.first * p.second;
-    }
     return ans;
 }
 
