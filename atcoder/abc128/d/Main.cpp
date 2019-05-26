@@ -32,23 +32,24 @@ int V[MAX_N];
 ll solve() {
     ll ans = -INF;
     for (int p = 0; p <= N; p++) {
-        for (int q = 0; p + q <= N; q++) {
-            for (int r = 0; r <= min(K - p - q, p + q); r++) {
-                vector<int> d;
-                for (int i = 0; i < p; i++) {
-                    d.push_back(V[i]);
-                }
-                for (int i = N - 1; i >= N - q; i--) {
-                    d.push_back(V[i]);
-                }
-                sort(d.begin(), d.end());
-
-                ll s = 0;
-                for (int i = r; i < (int)d.size(); i++) {
-                    s += d[i];
-                }
-                ans = max(ans, s);
+        for (int q = 0; p + q <= min(N, K); q++) {
+            vector<int> d;
+            for (int i = 0; i < p; i++) {
+                d.push_back(V[i]);
             }
+            for (int i = N - 1; i >= N - q; i--) {
+                d.push_back(V[i]);
+            }
+            sort(d.begin(), d.end(), greater<int>());
+
+            ll s = 0;
+            for (int i = 0; i < p + q; i++) {
+                if (d[i] <= 0 && p + q - i <= K - p - q) {
+                    break;
+                }
+                s += d[i];
+            }
+            ans = max(ans, s);
         }
     }
 
