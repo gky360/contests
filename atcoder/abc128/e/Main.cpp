@@ -26,50 +26,44 @@ typedef pair<ll, ll> pll;
 const int MAX_N = 2e5;
 const int MAX_Q = 2e5;
 
+enum EV {
+    EV_T = 0,
+    EV_S = 1,
+    EV_D = 2,
+};
+
 int N, Q;
 int S[MAX_N], T[MAX_N], X[MAX_N];
 int D[MAX_Q];
-vector<int> cx;
 
 void solve() {
+    vector<pair<int, pair<EV, int>>> events;
     for (int i = 0; i < N; i++) {
-        S[i] -= X[i];
-        T[i] -= X[i];
-        cx.push_back(S[i]);
-        cx.push_back(T[i]);
+        events.push_back({S[i] - X[i], {EV_S, X[i]}});
+        events.push_back({T[i] - X[i], {EV_T, X[i]}});
     }
     for (int i = 0; i < Q; i++) {
-        cx.push_back(D[i]);
+        events.push_back({D[i], {EV_D, i}});
     }
-    sort(cx.begin(), cx.end());
-    cx.erase(unique(cx.begin(), cx.end()), cx.end());
+    sort(events.begin(), events.end());
 
-    vector<pair<pii, bool>> line;
-    for (int i = 0; i < N; i++) {
-        int sx = lower_bound(cx.begin(), cx.end(), S[i]) - cx.begin();
-        int tx = lower_bound(cx.begin(), cx.end(), T[i]) - cx.begin();
-        line.push_back({{sx, X[i]}, true});
-        line.push_back({{tx, X[i]}, false});
-    }
-    sort(line.begin(), line.end());
-
-    vector<int> ans(cx.size());
+    vector<int> ans(Q);
     set<int> cur;
-    int j = 0;
-    for (int i = 0; i < (int)cx.size(); i++) {
-        for (; j < (int)line.size() && line[j].first.first <= i; j++) {
-            if (line[j].second) {
-                cur.insert(line[j].first.second);
-            } else {
-                cur.erase(line[j].first.second);
-            }
+    for (auto& e : events) {
+        switch (e.second.first) {
+            case EV_T:
+                cur.erase(e.second.second);
+                break;
+            case EV_S:
+                cur.insert(e.second.second);
+                break;
+            default:
+                ans[e.second.second] = cur.empty() ? -1 : *cur.begin();
         }
-        ans[i] = cur.empty() ? -1 : *cur.begin();
     }
 
     for (int i = 0; i < Q; i++) {
-        int cd = lower_bound(cx.begin(), cx.end(), D[i]) - cx.begin();
-        cout << ans[cd] << endl;
+        cout << ans[i] << endl;
     }
 }
 
