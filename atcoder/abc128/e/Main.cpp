@@ -37,19 +37,19 @@ int S[MAX_N], T[MAX_N], X[MAX_N];
 int D[MAX_Q];
 
 void solve() {
-    vector<pair<int, pair<EV, int>>> events;
+    vector<pair<int, pair<EV, int>>> es;
     for (int i = 0; i < N; i++) {
-        events.push_back({S[i] - X[i], {EV_S, X[i]}});
-        events.push_back({T[i] - X[i], {EV_T, X[i]}});
+        es.push_back({S[i] - X[i], {EV_S, X[i]}});
+        es.push_back({T[i] - X[i], {EV_T, X[i]}});
     }
     for (int i = 0; i < Q; i++) {
-        events.push_back({D[i], {EV_D, i}});
+        es.push_back({D[i], {EV_D, i}});
     }
-    sort(events.begin(), events.end());
+    sort(es.begin(), es.end());
 
     vector<int> ans(Q);
     set<int> cur;
-    for (auto& e : events) {
+    for (auto& e : es) {
         switch (e.second.first) {
             case EV_T:
                 cur.erase(e.second.second);
