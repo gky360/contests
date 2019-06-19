@@ -106,7 +106,7 @@ Number tr(const Matrix &A) {
     return ans;
 }
 
-int rank(Matrix A) {
+int mat_rank(Matrix A) {
     const int n = A.size(), m = A[0].size();
     int r = 0;
     for (int i = 0; r < n && i < m; ++i) {
