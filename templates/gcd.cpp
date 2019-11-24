@@ -58,11 +58,22 @@ public:
     }
     gf() : n(0) {}
     gf(int n) : n(n % MOD) {}
-    gf inv() { return gf(mod_inv(n, MOD)); }
     gf operator+(gf x) { return gf((n + x.n) % MOD); }
     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
     gf operator/(gf x) { return *this * x.inv(); }
+    gf inv() { return gf(mod_inv(n, MOD)); }
+    gf pow(int n) {
+        gf a = *this;
+        gf x = 1;
+        for (; n > 0; n >>= 1) {
+            if (n & 1) {
+                x = x * a;
+            }
+            a = a * a;
+        }
+        return x;
+    }
 };
 
 ll fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];
