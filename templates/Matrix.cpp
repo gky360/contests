@@ -62,10 +62,10 @@ Matrix mul(const Matrix &A, const Matrix &B) {
     return C;
 }
 
-Matrix pow(const Matrix &A, int e) {
+Matrix pow(const Matrix &A, ll e) {
     Matrix AA = A;
     Matrix ans = identity(A.size());
-    for (; e > 0; e /= 2) {
+    for (; e > 0; e >>= 1) {
         if (e & 1) {
             ans = mul(ans, AA);
         }

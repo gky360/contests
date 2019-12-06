@@ -57,20 +57,20 @@ public:
     }
     gf() : n(0) {}
     gf(int n) : n(n % MOD) {}
-    gf operator+(gf x) { return gf((n + x.n) % MOD); }
-    gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
-    gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
-    gf operator/(gf x) { return *this * x.inv(); }
-    gf& operator+=(gf x) { return *this = (*this + x); }
-    gf& operator-=(gf x) { return *this = (*this - x); }
-    gf& operator*=(gf x) { return *this = (*this * x); }
-    gf& operator/=(gf x) { return *this = (*this / x); }
-    gf inv() { return gf(mod_inv(n, MOD)); }
-    gf pow(int n) {
+    gf operator+(const gf x) const { return gf((n + x.n) % MOD); }
+    gf operator-(const gf x) const { return gf((n - x.n + MOD) % MOD); }
+    gf operator*(const gf x) const { return gf((1LL * n * x.n) % MOD); }
+    gf operator/(const gf x) const { return *this * x.inv(); }
+    gf& operator+=(const gf x) { return *this = (*this + x); }
+    gf& operator-=(const gf x) { return *this = (*this - x); }
+    gf& operator*=(const gf x) { return *this = (*this * x); }
+    gf& operator/=(const gf x) { return *this = (*this / x); }
+    gf inv() const { return gf(mod_inv(n, MOD)); }
+    gf pow(ll e) const {
         gf a = *this;
         gf x = 1;
-        for (; n > 0; n >>= 1) {
-            if (n & 1) {
+        for (; e > 0; e >>= 1) {
+            if (e & 1) {
                 x = x * a;
             }
             a = a * a;
