@@ -1,4 +1,3 @@
-// gcd.cpp
 #include <algorithm>
 using namespace std;
 typedef long long int ll;
@@ -62,6 +61,10 @@ public:
     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
     gf operator/(gf x) { return *this * x.inv(); }
+    gf& operator+=(gf x) { return *this = (*this + x); }
+    gf& operator-=(gf x) { return *this = (*this - x); }
+    gf& operator*=(gf x) { return *this = (*this * x); }
+    gf& operator/=(gf x) { return *this = (*this / x); }
     gf inv() { return gf(mod_inv(n, MOD)); }
     gf pow(int n) {
         gf a = *this;
