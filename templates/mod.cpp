@@ -69,8 +69,23 @@ public:
 
 ll fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];
 
+gf combi(int n, int k) {
+    return (n < 0 || k < 0 || n - k < 0) ? 0
+                                         : fact[n] / (fact[k] * fact[n - k]);
+}
+
 int main() {
-    // calc fact and inv fact
+    // calc fact, finv
+    fact[0] = 1;
+    for (int i = 1; i <= MAX_N; i++) {
+        fact[i] = (fact[i - 1] * i) % MOD;
+    }
+    finv[MAX_N] = mod_inv(fact[MAX_N], MOD);
+    for (int i = MAX_N - 1; i > 0; i--) {
+        finv[i] = finv[i + 1] * i % MOD;
+    }
+
+    // calc fact, inv,  finv
     fact[0] = fact[1] = 1;
     finv[0] = finv[1] = 1;
     inv[1] = 1;
