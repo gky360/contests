@@ -8,19 +8,18 @@ typedef pair<ll, ll> pll;
 const int MAX_V = 1e5;
 const int MAX_LOG_V = 18;
 
-int V;
 vector<int> g[MAX_V];
 int par[MAX_LOG_V][MAX_V];
 int dep[MAX_V];
 
-void dfs(int v, int p = -1, int d = 0) {
+void dfs_lca(int v, int p = -1, int d = 0) {
     par[0][v] = p;
     dep[v] = d;
     for (int to : g[v]) {
         if (to == p) {
             continue;
         }
-        dfs(to, v, d + 1);
+        dfs_lca(to, v, d + 1);
     }
 }
 
@@ -45,16 +44,16 @@ int lca(int u, int v) {
     return par[0][u];
 }
 
-void init() {
-    dfs(0);
+void init_lca(int root) {
+    dfs_lca(root);
     for (int k = 1; k < MAX_LOG_V; k++) {
-        for (int v = 0; v < V; v++) {
+        for (int v = 0; v < MAX_V; v++) {
             par[k][v] = (par[k - 1][v] < 0) ? -1 : par[k - 1][par[k - 1][v]];
         }
     }
 }
 
 int main() {
-    init();
+    init_lca(0);
     return 0;
 }

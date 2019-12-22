@@ -10,11 +10,10 @@ typedef pair<ll, ll> pll;
 const int MAX_TXT = 1e5;
 const int MAX_PAT = 1e4;
 
-string txt, pat;
 int table[MAX_PAT + 1];
 bool matched[MAX_TXT];
 
-void kmp() {
+void kmp(string txt, string pat) {
     int n = txt.length(), m = pat.length();
 
     table[0] = -1;
@@ -37,6 +36,6 @@ void kmp() {
 }
 
 int main() {
-    kmp();
+    kmp("ABABABCABAAB", "ABABCA");
     return 0;
 }
