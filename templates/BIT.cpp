@@ -18,7 +18,7 @@ public:
         }
         return;
     }
-    T sum(int i) {  // i : [0, n), returns sum of [0, i)
+    T sum(int i) {  // i : [0, n], returns sum of [0, i)
         T s = 0;
         for (; i > 0; i -= i & -i) {
             s += b[i];
