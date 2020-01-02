@@ -29,12 +29,12 @@ public:
     int n;
     gf() : n(0) {}
     gf(int n) : n(n % MOD) {}
-    gf operator+(const gf x) const { return gf((n + x.n) % MOD); }
-    gf operator-(const gf x) const { return gf((n - x.n + MOD) % MOD); }
-    gf operator*(const gf x) const { return gf((1LL * n * x.n) % MOD); }
-    gf& operator+=(const gf x) { return *this = (*this + x); }
-    gf& operator-=(const gf x) { return *this = (*this - x); }
-    gf& operator*=(const gf x) { return *this = (*this * x); }
+    gf operator+(gf x) { return gf((n + x.n) % MOD); }
+    gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
+    gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
+    gf& operator+=(gf x) { return *this = (*this + x); }
+    gf& operator-=(gf x) { return *this = (*this - x); }
+    gf& operator*=(gf x) { return *this = (*this * x); }
 };
 
 // galois field (full feature)

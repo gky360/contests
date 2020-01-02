@@ -26,3 +26,7 @@ public:
     int root(int x) { return data[x] < 0 ? x : (data[x] = root(data[x])); }
     int size(int x) { return -data[root(x)]; }
 };
+
+int main() {
+    return 0;
+}
