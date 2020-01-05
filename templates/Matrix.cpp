@@ -1,19 +1,8 @@
-/*
+/**
  * Matrix
  */
 
-#include <algorithm>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <map>
-#include <queue>
-#include <set>
-#include <stack>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 typedef long long int ll;
 typedef pair<int, int> pii;
@@ -124,6 +113,40 @@ int mat_rank(Matrix A) {
             A[r][k] /= A[r][i];
         }
         for (int j = r + 1; j < n; ++j) {
+            for (int k = i; k < m; ++k) {
+                A[j][k] -= A[r][k] * A[j][i];
+            }
+        }
+        ++r;
+    }
+    return r;
+}
+
+/**
+ * ガウスの消去法
+ * @returns rank
+ */
+int elim(Matrix &A) {
+    const int n = A.size(), m = A[0].size();
+    int r = 0;
+    for (int i = 0; r < n && i < m; ++i) {
+        int pivot = r;
+        for (int j = r + 1; j < n; ++j) {
+            if (fabs(A[j][i]) > fabs(A[pivot][i])) {
+                pivot = j;
+            }
+        }
+        swap(A[pivot], A[r]);
+        if (fabs(A[r][i]) <= eps) {
+            continue;
+        }
+        for (int k = m - 1; k >= i; --k) {
+            A[r][k] /= A[r][i];
+        }
+        for (int j = 0; j < n; ++j) {
+            if (j == r) {
+                continue;
+            }
             for (int k = i; k < m; ++k) {
                 A[j][k] -= A[r][k] * A[j][i];
             }
