@@ -37,48 +37,32 @@ public:
     gf& operator*=(gf x) { return *this = (*this * x); }
 };
 
-// galois field (full feature)
+// // galois field (full feature)
 // class gf {
 // public:
 //     int n;
-//     static int extgcd(int a, int b, int& x, int& y) {
-//         int d = a;
-//         if (b != 0) {
-//             d = extgcd(b, a % b, y, x);
-//             y -= (a / b) * x;
-//         } else {
-//             x = 1;
-//             y = 0;
-//         }
-//         return d;
-//     }
 //     static int mod_inv(int a, int m) {
-//         int x, y;
-//         extgcd(a, m, x, y);
-//         return (m + x) % m;
+//         int u = 0, v = 1;
+//         while (a != 0) {
+//             int t = m / a;
+//             m -= t * a;
+//             u -= t * v;
+//             swap(a, m);
+//             swap(u, v);
+//         }
+//         return (u + MOD) % MOD;
 //     }
 //     gf() : n(0) {}
 //     gf(int n) : n(n % MOD) {}
-//     gf operator+(const gf x) const { return gf((n + x.n) % MOD); }
-//     gf operator-(const gf x) const { return gf((n - x.n + MOD) % MOD); }
-//     gf operator*(const gf x) const { return gf((1LL * n * x.n) % MOD); }
-//     gf operator/(const gf x) const { return *this * x.inv(); }
-//     gf& operator+=(const gf x) { return *this = (*this + x); }
-//     gf& operator-=(const gf x) { return *this = (*this - x); }
-//     gf& operator*=(const gf x) { return *this = (*this * x); }
-//     gf& operator/=(const gf x) { return *this = (*this / x); }
-//     gf inv() const { return gf(mod_inv(n, MOD)); }
-//     gf pow(ll e) const {
-//         gf a = *this;
-//         gf x = 1;
-//         for (; e > 0; e >>= 1) {
-//             if (e & 1) {
-//                 x = x * a;
-//             }
-//             a = a * a;
-//         }
-//         return x;
-//     }
+//     gf operator+(gf x) { return gf((n + x.n) % MOD); }
+//     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
+//     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
+//     gf operator/(gf x) { return *this * x.inv(); }
+//     gf& operator+=(gf x) { return *this = (*this + x); }
+//     gf& operator-=(gf x) { return *this = (*this - x); }
+//     gf& operator*=(gf x) { return *this = (*this * x); }
+//     gf& operator/=(gf x) { return *this = (*this / x); }
+//     gf inv() { return gf(mod_inv(n, MOD)); }
 // };
 
 ll fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];
