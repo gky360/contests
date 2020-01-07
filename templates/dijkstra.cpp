@@ -19,37 +19,33 @@ class Graph {
 public:
     ll dist[MAX_V];
     vector<pli> g[MAX_V];  // cost, to
-    void add_edge(int from, int to, ll cost);
-    void dijkstra(int s);
-};
+    void add_edge(int from, int to, ll cost) {
+        g[from].push_back(pli(cost, to));
+        return;
+    }
+    void dijkstra(int s) {
+        priority_queue<pli, vector<pli>, greater<pli>> q;
+        pli p, e;
 
-void Graph::add_edge(int from, int to, ll cost) {
-    g[from].push_back(pli(cost, to));
-    return;
-}
-
-void Graph::dijkstra(int s) {
-    priority_queue<pli, vector<pli>, greater<pli>> q;
-    pli p, e;
-
-    fill(dist, dist + MAX_V, INF);
-    dist[s] = 0;
-    q.push(pli(dist[s], s));
-    while (!q.empty()) {
-        p = q.top();
-        q.pop();
-        if (dist[p.second] < p.first) {
-            continue;
-        }
-        for (int i = 0; i < (int)g[p.second].size(); i++) {
-            e = g[p.second][i];
-            if (dist[e.second] > dist[p.second] + e.first) {
-                dist[e.second] = dist[p.second] + e.first;
-                q.push(pli(dist[e.second], e.second));
+        fill(dist, dist + MAX_V, INF);
+        dist[s] = 0;
+        q.push(pli(dist[s], s));
+        while (!q.empty()) {
+            p = q.top();
+            q.pop();
+            if (dist[p.second] < p.first) {
+                continue;
+            }
+            for (int i = 0; i < (int)g[p.second].size(); i++) {
+                e = g[p.second][i];
+                if (dist[e.second] > dist[p.second] + e.first) {
+                    dist[e.second] = dist[p.second] + e.first;
+                    q.push(pli(dist[e.second], e.second));
+                }
             }
         }
+        return;
     }
-    return;
-}
+};
 
 int main() { return 0; }
