@@ -11,7 +11,7 @@ typedef pair<ll, int> pli;
 typedef double Number;
 typedef vector<Number> Array;
 typedef vector<Array> Matrix;
-const Number eps = 1e-8;
+const Number EPS = 1e-8;
 
 Matrix identity(int n) {
     Matrix A(n, Array(n));
@@ -66,20 +66,20 @@ Matrix pow(const Matrix &A, ll e) {
 Number det(Matrix A) {
     const int n = A.size();
     Number D = 1;
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; i++) {
         int pivot = i;
-        for (int j = i + 1; j < n; ++j) {
+        for (int j = i + 1; j < n; j++) {
             if (abs(A[j][i]) > abs(A[pivot][i])) {
                 pivot = j;
             }
         }
         swap(A[pivot], A[i]);
         D *= A[i][i] * (i != pivot ? -1 : 1);
-        if (abs(A[i][i]) <= eps) {
+        if (abs(A[i][i]) <= EPS) {
             break;
         }
-        for (int j = i + 1; j < n; ++j) {
-            for (int k = n - 1; k >= i; --k) {
+        for (int j = i + 1; j < n; j++) {
+            for (int k = n - 1; k >= i; k--) {
                 A[j][k] -= A[i][k] * A[j][i] / A[i][i];
             }
         }
@@ -98,60 +98,59 @@ Number tr(const Matrix &A) {
 int mat_rank(Matrix A) {
     const int n = A.size(), m = A[0].size();
     int r = 0;
-    for (int i = 0; r < n && i < m; ++i) {
+    for (int i = 0; r < n && i < m; i++) {
         int pivot = r;
-        for (int j = r + 1; j < n; ++j) {
+        for (int j = r + 1; j < n; j++) {
             if (fabs(A[j][i]) > fabs(A[pivot][i])) {
                 pivot = j;
             }
         }
         swap(A[pivot], A[r]);
-        if (fabs(A[r][i]) <= eps) {
+        if (fabs(A[r][i]) <= EPS) {
             continue;
         }
-        for (int k = m - 1; k >= i; --k) {
+        for (int k = m - 1; k >= i; k--) {
             A[r][k] /= A[r][i];
         }
-        for (int j = r + 1; j < n; ++j) {
-            for (int k = i; k < m; ++k) {
+        for (int j = r + 1; j < n; j++) {
+            for (int k = m - 1; k >= i; k--) {
                 A[j][k] -= A[r][k] * A[j][i];
             }
         }
-        ++r;
+        r++;
     }
     return r;
 }
 
 /**
  * ガウスの消去法
- * @returns rank
  */
-int elim(Matrix &A) {
+Matrix regularize(Matrix A) {
     const int n = A.size(), m = A[0].size();
     int r = 0;
-    for (int i = 0; r < n && i < m; ++i) {
+    for (int i = 0; r < n && i < m; i++) {
         int pivot = r;
-        for (int j = r + 1; j < n; ++j) {
+        for (int j = r + 1; j < n; j++) {
             if (fabs(A[j][i]) > fabs(A[pivot][i])) {
                 pivot = j;
             }
         }
         swap(A[pivot], A[r]);
-        if (fabs(A[r][i]) <= eps) {
+        if (fabs(A[r][i]) <= EPS) {
             continue;
         }
-        for (int k = m - 1; k >= i; --k) {
+        for (int k = m - 1; k >= i; k--) {
             A[r][k] /= A[r][i];
         }
-        for (int j = 0; j < n; ++j) {
+        for (int j = 0; j < n; j++) {
             if (j == r) {
                 continue;
             }
-            for (int k = i; k < m; ++k) {
+            for (int k = m - 1; k >= i; k--) {
                 A[j][k] -= A[r][k] * A[j][i];
             }
         }
-        ++r;
+        r++;
     }
-    return r;
+    return A;
 }
