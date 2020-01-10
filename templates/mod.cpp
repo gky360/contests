@@ -2,22 +2,34 @@
 using namespace std;
 typedef long long int ll;
 
-ll extgcd(ll a, ll b, ll& x, ll& y) {
-    ll d = a;
-    if (b != 0) {
-        d = extgcd(b, a % b, y, x);
-        y -= (a / b) * x;
-    } else {
-        x = 1;
-        y = 0;
-    }
-    return d;
-}
+// ll extgcd(ll a, ll b, ll& x, ll& y) {
+//     ll d = a;
+//     if (b != 0) {
+//         d = extgcd(b, a % b, y, x);
+//         y -= (a / b) * x;
+//     } else {
+//         x = 1;
+//         y = 0;
+//     }
+//     return d;
+// }
+//
+// ll mod_inv(ll a, ll m) {
+//     ll x, y;
+//     extgcd(a, m, x, y);
+//     return (m + x) % m;
+// }
 
 ll mod_inv(ll a, ll m) {
-    ll x, y;
-    extgcd(a, m, x, y);
-    return (m + x) % m;
+    ll u = 0, v = 1;
+    while (a != 0) {
+        ll t = m / a;
+        m -= t * a;
+        u -= t * v;
+        swap(a, m);
+        swap(u, v);
+    }
+    return (u + m) % m;
 }
 
 const int MAX_N = 1e5;
@@ -50,7 +62,7 @@ public:
 //             swap(a, m);
 //             swap(u, v);
 //         }
-//         return (u + MOD) % MOD;
+//         return (u + m) % m;
 //     }
 //     gf() : n(0) {}
 //     gf(int n) : n(n % MOD) {}
@@ -68,8 +80,9 @@ public:
 ll fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];
 
 gf combi(int n, int k) {
-    return (n < 0 || k < 0 || n - k < 0) ? 0
-                                         : fact[n] / (fact[k] * fact[n - k]);
+    return (n < 0 || k < 0 || n - k < 0)
+               ? 0
+               : fact[n] * (finv[k] * finv[n - k] % MOD) % MOD;
 }
 
 int main() {
@@ -83,7 +96,7 @@ int main() {
         finv[i] = finv[i + 1] * i % MOD;
     }
 
-    // calc fact, inv,  finv
+    // calc fact, inv, finv
     fact[0] = fact[1] = 1;
     finv[0] = finv[1] = 1;
     inv[1] = 1;
