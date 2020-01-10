@@ -1,19 +1,72 @@
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 typedef long long int ll;
+typedef pair<int, int> pii;
+typedef pair<ll, int> pli;
+typedef pair<ll, ll> pll;
+#define ALL(c) (c).begin(), (c).end()
 
-// ll extgcd(ll a, ll b, ll& x, ll& y) {
-//     ll d = a;
-//     if (b != 0) {
-//         d = extgcd(b, a % b, y, x);
-//         y -= (a / b) * x;
-//     } else {
-//         x = 1;
-//         y = 0;
-//     }
-//     return d;
-// }
-//
+ll gcd(ll a, ll b) {
+    while (b > 0) {
+        swap(b, a %= b);
+    }
+    return a;
+}
+
+ll lcm(ll a, ll b) {
+    ll d = gcd(a, b);
+    return a * b / d;
+}
+
+/**
+ * 素因数分解
+ * @return n = p0^e0 * p1^e1 * ... のとき、 [{p0, e0}, {p1, e1}, ...]
+ */
+vector<pli> prime_factorize(ll n) {
+    vector<pli> ret;
+    for (ll d = 2; d * d <= n; d++) {
+        if (n % d != 0) {
+            continue;
+        }
+        int e = 0;
+        while (n % d == 0) {
+            n /= d;
+            e++;
+        }
+        ret.push_back({d, e});
+    }
+    if (n != 1) {
+        ret.push_back({n, 1});
+    }
+    return ret;
+}
+
+/**
+ * a^n mod m
+ */
+ll pow_mod(ll a, ll n, ll m) {
+    ll ret = 1;
+    for (; n > 0; n >>= 1) {
+        if (n & 1) {
+            (ret *= a) %= m;
+        }
+        (a *= a) %= m;
+    }
+    return ret;
+}
+
+ll extgcd(ll a, ll b, ll& x, ll& y) {
+    ll d = a;
+    if (b != 0) {
+        d = extgcd(b, a % b, y, x);
+        y -= (a / b) * x;
+    } else {
+        x = 1;
+        y = 0;
+    }
+    return d;
+}
+
 // ll mod_inv(ll a, ll m) {
 //     ll x, y;
 //     extgcd(a, m, x, y);
@@ -32,79 +85,44 @@ ll mod_inv(ll a, ll m) {
     return (u + m) % m;
 }
 
-const int MAX_N = 1e5;
-const int MOD = 1e9 + 7;
-
-// galois field
-class gf {
-public:
-    int n;
-    gf() : n(0) {}
-    gf(int n) : n(n % MOD) {}
-    gf operator+(gf x) { return gf((n + x.n) % MOD); }
-    gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
-    gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
-    gf& operator+=(gf x) { return *this = (*this + x); }
-    gf& operator-=(gf x) { return *this = (*this - x); }
-    gf& operator*=(gf x) { return *this = (*this * x); }
-};
-
-// // galois field (full feature)
-// class gf {
-// public:
-//     int n;
-//     static int mod_inv(int a, int m) {
-//         int u = 0, v = 1;
-//         while (a != 0) {
-//             int t = m / a;
-//             m -= t * a;
-//             u -= t * v;
-//             swap(a, m);
-//             swap(u, v);
-//         }
-//         return (u + m) % m;
-//     }
-//     gf() : n(0) {}
-//     gf(int n) : n(n % MOD) {}
-//     gf operator+(gf x) { return gf((n + x.n) % MOD); }
-//     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
-//     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
-//     gf operator/(gf x) { return *this * x.inv(); }
-//     gf& operator+=(gf x) { return *this = (*this + x); }
-//     gf& operator-=(gf x) { return *this = (*this - x); }
-//     gf& operator*=(gf x) { return *this = (*this * x); }
-//     gf& operator/=(gf x) { return *this = (*this / x); }
-//     gf inv() { return gf(mod_inv(n, MOD)); }
-// };
-
-ll fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];
-
-gf combi(int n, int k) {
-    return (n < 0 || k < 0 || n - k < 0)
-               ? 0
-               : fact[n] * (finv[k] * finv[n - k] % MOD) % MOD;
+/**
+ * オイラー関数
+ *
+ * n 以下の n と互いに素な自然数の個数。
+ * x と n が互いに素のとき、 x^euler_phi(m) mod m = 1 が成り立つ。
+ */
+ll euler_phi(ll n) {
+    ll ret = n;
+    for (ll i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            ret = ret / i * (i - 1);
+            while (n % i == 0) {
+                n /= i;
+            }
+        }
+    }
+    if (n != 1) {
+        ret = ret / n * (n - 1);
+    }
+    return ret;
 }
 
-int main() {
-    // calc fact, finv
-    fact[0] = 1;
-    for (int i = 1; i <= MAX_N; i++) {
-        fact[i] = (fact[i - 1] * i) % MOD;
+/*
+ * a の位数を計算する
+ *
+ * a の位数 ... a^k mod m = 1 となる最小の k
+ */
+ll calc_order(ll a, ll m) {
+    ll phi_m = euler_phi(m);
+    ll ret = phi_m;
+    auto pf = prime_factorize(phi_m);
+    for (auto& pe : pf) {
+        ll p = pe.first;
+        while (ret % p == 0 && pow_mod(a, ret / p, m) == 1) {
+            ret /= p;
+        }
     }
-    finv[MAX_N] = mod_inv(fact[MAX_N], MOD);
-    for (int i = MAX_N - 1; i > 0; i--) {
-        finv[i] = finv[i + 1] * i % MOD;
-    }
-
-    // calc fact, inv, finv
-    fact[0] = fact[1] = 1;
-    finv[0] = finv[1] = 1;
-    inv[1] = 1;
-    for (int i = 2; i <= MAX_N; i++) {
-        fact[i] = (fact[i - 1] * i) % MOD;
-        inv[i] = MOD - inv[MOD % i] * (MOD / i) % MOD;
-        finv[i] = (finv[i - 1] * inv[i]) % MOD;
-    }
-
-    return 0;
+    return ret;
 }
+
+int main() { return 0; }
