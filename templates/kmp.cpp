@@ -13,7 +13,7 @@ const int MAX_PAT = 1e4;
 int table[MAX_PAT + 1];
 bool matched[MAX_TXT];
 
-void kmp(string txt, string pat) {
+void kmp(const string &txt, const string &pat) {
     int n = txt.length(), m = pat.length();
 
     table[0] = -1;
