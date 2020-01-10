@@ -2,20 +2,7 @@
 [bitflyer2018-final] D - 数列 XOR
 */
 
-#include <algorithm>
-#include <cassert>
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <map>
-#include <numeric>
-#include <queue>
-#include <set>
-#include <stack>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 typedef long long int ll;
 typedef pair<int, int> pii;
@@ -23,50 +10,55 @@ typedef pair<ll, int> pli;
 
 const int MAX_B = 60;
 
-vector<ll> regularize(vector<ll> a) {
-    int N = a.size();
-    int c = 0;
-    for (int i = 0; i <= MAX_B; i++) {
-        int p = -1;
-        for (int j = c; j < N; j++) {
-            if (a[j] & (1LL << i)) {
-                p = j;
+typedef bitset<MAX_B> Array;
+typedef vector<Array> Matrix;
+
+Matrix regularize(Matrix A) {
+    const int n = A.size(), m = A[0].size();
+    int r = 0;
+    for (int i = 0; r < n && i < m; i++) {
+        int pivot = r;
+        for (int j = r; j < n; j++) {
+            if (A[j][m - i - 1]) {
+                pivot = j;
                 break;
             }
         }
-        if (p == -1) {
+        swap(A[pivot], A[r]);
+        if (!A[r][m - i - 1]) {
             continue;
         }
-        swap(a[c], a[p]);
-        for (int j = 0; j < N; j++) {
-            if (j == c) {
-                continue;
-            }
-            if (a[j] & (1LL << i)) {
-                a[j] ^= a[c];
+        for (int j = 0; j < n; j++) {
+            if (j != r && A[j][m - i - 1]) {
+                A[j] ^= A[r];
             }
         }
-        c++;
+        r++;
     }
-    return a;
+    return A;
 }
 
-ll solve(const int N, const vector<ll>& a, const vector<ll>& b) {
-    return regularize(a) == regularize(b);
-}
+int N;
+Matrix A, B;
+
+ll solve() { return regularize(A) == regularize(B); }
 
 int main() {
-    int N;
     cin >> N;
-    vector<ll> a(N), b(N);
+    A = Matrix(N);
     for (int i = 0; i < N; i++) {
-        cin >> a[i];
+        ll a;
+        cin >> a;
+        A[i] = Array(a);
     }
+    B = Matrix(N);
     for (int i = 0; i < N; i++) {
-        cin >> b[i];
+        ll b;
+        cin >> b;
+        B[i] = Array(b);
     }
 
-    cout << (solve(N, a, b) ? "Yes" : "No") << endl;
+    cout << (solve() ? "Yes" : "No") << endl;
 
     return 0;
 }
