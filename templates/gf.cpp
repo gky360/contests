@@ -3,7 +3,7 @@ using namespace std;
 typedef long long int ll;
 
 ll mod_inv(ll a, ll m) {
-    ll u = 0, v = 1;
+    ll u = 0, v = 1, mod = m;
     while (a != 0) {
         ll t = m / a;
         m -= t * a;
@@ -11,7 +11,7 @@ ll mod_inv(ll a, ll m) {
         swap(a, m);
         swap(u, v);
     }
-    return (u + m) % m;
+    return (u + mod) % mod;
 }
 
 const int MAX_N = 1e5;
@@ -22,7 +22,7 @@ class gf {
 public:
     int n;
     gf() : n(0) {}
-    gf(int n) : n(n % MOD) {}
+    gf(int n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
     gf operator+(gf x) { return gf((n + x.n) % MOD); }
     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
@@ -35,7 +35,7 @@ public:
 // class gf {
 // public:
 //     int n;
-//     static int mod_inv(int a, int m) {
+//     static gf mod_inv(int a, int m) {
 //         int u = 0, v = 1;
 //         while (a != 0) {
 //             int t = m / a;
@@ -44,10 +44,10 @@ public:
 //             swap(a, m);
 //             swap(u, v);
 //         }
-//         return (u + m) % m;
+//         return gf(u);
 //     }
 //     gf() : n(0) {}
-//     gf(int n) : n(n % MOD) {}
+//     gf(int n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
 //     gf operator+(gf x) { return gf((n + x.n) % MOD); }
 //     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
 //     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
@@ -56,7 +56,7 @@ public:
 //     gf& operator-=(gf x) { return *this = (*this - x); }
 //     gf& operator*=(gf x) { return *this = (*this * x); }
 //     gf& operator/=(gf x) { return *this = (*this / x); }
-//     gf inv() { return gf(mod_inv(n, MOD)); }
+//     gf inv() { return mod_inv(n, MOD); }
 // };
 
 gf fact[MAX_N + 1], finv[MAX_N + 1], inv[MAX_N + 1];

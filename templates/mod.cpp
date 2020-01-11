@@ -74,7 +74,7 @@ ll extgcd(ll a, ll b, ll& x, ll& y) {
 // }
 
 ll mod_inv(ll a, ll m) {
-    ll u = 0, v = 1;
+    ll u = 0, v = 1, mod = m;
     while (a != 0) {
         ll t = m / a;
         m -= t * a;
@@ -82,7 +82,7 @@ ll mod_inv(ll a, ll m) {
         swap(a, m);
         swap(u, v);
     }
-    return (u + m) % m;
+    return (u + mod) % mod;
 }
 
 /**
