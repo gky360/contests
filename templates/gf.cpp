@@ -76,8 +76,8 @@ int main() {
     }
     finv[MAX_N] = mod_inv(fact[MAX_N].n, MOD);
     // finv[MAX_N] = fact[MAX_N].inv();
-    for (int i = MAX_N - 1; i > 0; i--) {
-        finv[i] = finv[i + 1] * i;
+    for (int i = MAX_N; i > 0; i--) {
+        finv[i - 1] = finv[i] * i;
     }
 
     // calc fact, inv, finv
