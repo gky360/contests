@@ -19,6 +19,22 @@ ll lcm(ll a, ll b) {
 }
 
 /**
+ * 約数列挙
+ */
+vector<int> divisors(int n) {
+    vector<int> ret;
+    for (int i = 1; i * i <= n; i++) {
+        if (n % i == 0) {
+            ret.push_back(i);
+            if (i * i != n) {
+                ret.push_back(n / i);
+            }
+        }
+    }
+    return ret;
+}
+
+/**
  * 素因数分解
  * @return n = p0^e0 * p1^e1 * ... のとき、 [{p0, e0}, {p1, e1}, ...]
  */
