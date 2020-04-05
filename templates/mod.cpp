@@ -60,7 +60,7 @@ vector<pli> prime_factorize(ll n) {
 /**
  * a^n mod m
  */
-ll pow_mod(ll a, ll n, ll m) {
+ll mod_pow(ll a, ll n, ll m) {
     ll ret = 1;
     for (; n > 0; n >>= 1) {
         if (n & 1) {
