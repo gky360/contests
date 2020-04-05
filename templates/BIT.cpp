@@ -1,23 +1,14 @@
 // BIT.cpp
 // BinaryIndexedTree
 
-#include <cstdio>
+#include <vector>
 using namespace std;
-
-const int MAX_BIT_IDX = 1000000;
 
 template <typename T>
 class BIT {
 public:
-    T b[MAX_BIT_IDX + 1];
-    int n;
-    void init(int num) {
-        n = num;
-        for (int i = 0; i <= n; i++) {
-            b[i] = 0;
-        }
-        return;
-    }
+    vector<T> b;
+    BIT(int n) : b(n + 1) {}
     T sum(int i) {  // i : [0, n], returns sum of [0, i)
         T s = 0;
         for (; i > 0; i -= i & -i) {
@@ -26,7 +17,7 @@ public:
         return s;
     }
     void add(int i, T x) {  // i : [0, n)
-        for (i += 1; i <= n; i += i & -i) {
+        for (i += 1; i < (int)b.size(); i += i & -i) {
             b[i] += x;
         }
         return;
@@ -37,11 +28,7 @@ template <typename T>
 class LinearBIT {
 public:
     BIT<T> bit0, bit1;
-    void init(int num) {
-        bit0.init(num);
-        bit1.init(num);
-        return;
-    }
+    LinearBIT(int n) : bit0(n), bit1(n) {}
     T sum(int i) { return bit1.sum(i) * i + bit0.sum(i); }
     void add(int l, int r, T x) {  // [l, r)
         bit0.add(l, -x * (l - 1));
@@ -52,7 +39,7 @@ public:
     }
 };
 
-BIT<int> bit;
-LinearBIT<int> lb;
+BIT<int> bit(100000);
+LinearBIT<int> lb(100000);
 
 int main() { return 0; }
