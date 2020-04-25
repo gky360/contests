@@ -1,63 +1,72 @@
-// ARC087
-// E - Prefix-free Game
+/*
+[arc087] E - Prefix-free Game
+*/
 
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long int ll;
 typedef pair<int, int> pii;
 typedef pair<ll, int> pli;
+typedef pair<ll, ll> pll;
+#define ALL(c) (c).begin(), (c).end()
 
-const int MAX_N = 100000;
+const int MAX_N = 1e5;
 
-struct node {
-    int child[2] = {-1, -1};
+struct Node {
+    int ch[2] = {-1, -1};
 };
 
 int N;
 ll L;
-vector<node> tree;
+string S[MAX_N];
+vector<Node> tree;
 
 void add(string &s, int k = 0, int v = 0) {
     if (k >= (int)s.size()) {
         return;
     }
-    node &nd = tree[v];
-    int next_i = s[k] == '0' ? 0 : 1;
-    int next_v = nd.child[next_i];
-    if (next_v == -1) {
-        next_v = nd.child[next_i] = tree.size();
-        tree.push_back(node());
+    Node &nd = tree[v];
+    int ci = s[k] == '0' ? 0 : 1;
+    int nv = nd.ch[ci];
+    if (nv == -1) {
+        nv = nd.ch[ci] = tree.size();
+        tree.push_back(Node());
     }
-    add(s, k + 1, next_v);
-    return;
+    add(s, k + 1, nv);
 }
 
-ll grundy(ll a) { return a & (-a); }
+ll grundy(ll n) { return n & (-n); }
 
-ll dfs(int v = 0, ll d = 0) {
+ll dfs(int v = 0, int d = 0) {
     if (v == -1) {
         return 0;
     }
     ll ret = 0;
-    if ((tree[v].child[0] == -1) != (tree[v].child[1] == -1)) {
-        ret = grundy(L - d);
+    if ((tree[v].ch[0] == -1) != (tree[v].ch[1] == -1)) {
+        ret ^= grundy(L - d);
     }
     for (int i = 0; i < 2; i++) {
-        ret ^= dfs(tree[v].child[i], d + 1);
+        ret ^= dfs(tree[v].ch[i], d + 1);
     }
     return ret;
 }
 
-int main() {
-    cin >> N >> L;
-    tree.push_back(node());
+bool solve() {
+    tree.push_back(Node());
     for (int i = 0; i < N; i++) {
-        string s;
-        cin >> s;
-        add(s);
+        add(S[i]);
     }
 
-    cout << (dfs() != 0 ? "Alice" : "Bob") << endl;
+    return dfs();
+}
+
+int main() {
+    cin >> N >> L;
+    for (int i = 0; i < N; i++) {
+        cin >> S[i];
+    }
+
+    cout << (solve() ? "Alice" : "Bob") << endl;
 
     return 0;
 }
