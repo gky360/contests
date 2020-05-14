@@ -16,9 +16,7 @@ public:
     vector<T> lazy;
     LazyRMQ(int _n) {
         n = 1;
-        while (n < _n) {
-            n <<= 1;
-        }
+        while (n < _n) n <<= 1;
         data.resize(2 * n - 1);
         lazy.resize(2 * n - 1);
     }
@@ -27,9 +25,7 @@ public:
 
 private:
     void eval(int k) {
-        if (lazy[k] == 0) {
-            return;
-        }
+        if (lazy[k] == 0) return;
         data[k] += lazy[k];
         if (2 * k + 2 < 2 * n - 1) {
             lazy[2 * k + 1] += lazy[k];
@@ -39,9 +35,7 @@ private:
     }
     void add(int a, int b, T x, int k, int l, int r) {  // [a, b), [l, r)
         eval(k);
-        if (r <= a || b <= l) {
-            return;
-        }
+        if (r <= a || b <= l) return;
         if (a <= l && r <= b) {
             lazy[k] += x;
             eval(k);
@@ -53,12 +47,8 @@ private:
     }
     T query(int a, int b, int k, int l, int r) {  // [a, b), [l, r)
         eval(k);
-        if (r <= a || b <= l) {
-            return INF;
-        }
-        if (a <= l && r <= b) {
-            return data[k];
-        }
+        if (r <= a || b <= l) return INF;
+        if (a <= l && r <= b) return data[k];
         return min(query(a, b, k * 2 + 1, l, (l + r) / 2),
                    query(a, b, k * 2 + 2, (l + r) / 2, r));
     }
@@ -71,9 +61,7 @@ public:
     vector<T> data;
     RMQ(int _n) {
         n = 1;
-        while (n < _n) {
-            n <<= 1;
-        }
+        while (n < _n) n <<= 1;
         data.resize(2 * n - 1);
         fill(data.begin(), data.end(), INF);
     }
@@ -89,12 +77,8 @@ public:
 
 private:
     T query(int a, int b, int k, int l, int r) {  // [a, b), [l, r)
-        if (r <= a || b <= l) {
-            return INF;
-        }
-        if (a <= l && r <= b) {
-            return data[k];
-        }
+        if (r <= a || b <= l) return INF;
+        if (a <= l && r <= b) return data[k];
         return min(query(a, b, k * 2 + 1, l, (l + r) / 2),
                    query(a, b, k * 2 + 2, (l + r) / 2, r));
     }
