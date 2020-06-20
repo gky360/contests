@@ -68,6 +68,17 @@ gf combi(int n, int k) {
     //                                      : fact[n] / (fact[k] * fact[n - k]);
 }
 
+gf mod_pow(gf a, ll n) {
+    gf ret = 1;
+    for (; n > 0; n >>= 1) {
+        if (n & 1) {
+            ret *= a;
+        }
+        a *= a;
+    }
+    return ret;
+}
+
 int main() {
     // calc fact, finv
     fact[0] = 1;
