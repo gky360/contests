@@ -11,14 +11,15 @@ using namespace std;
 
 typedef long long int ll;
 typedef pair<ll, int> pli;
+#define ALL(c) (c).begin(), (c).end()
 
-const int MAX_V = 10000;
 const ll INF = 1e18;
 
 class Graph {
 public:
-    ll dist[MAX_V];
-    vector<pli> g[MAX_V];  // cost, to
+    vector<ll> dist;
+    vector<vector<pli>> g;  // cost, to
+    Graph(int n) : dist(n), g(n) {}
     void add_edge(int from, int to, ll cost) {
         g[from].push_back(pli(cost, to));
         return;
@@ -27,7 +28,7 @@ public:
         priority_queue<pli, vector<pli>, greater<pli>> q;
         pli p, e;
 
-        fill(dist, dist + MAX_V, INF);
+        fill(ALL(dist), INF);
         dist[s] = 0;
         q.push(pli(dist[s], s));
         while (!q.empty()) {
