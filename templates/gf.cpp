@@ -39,10 +39,8 @@ public:
 //         int u = 0, v = 1;
 //         while (a != 0) {
 //             int t = m / a;
-//             m -= t * a;
-//             u -= t * v;
-//             swap(a, m);
-//             swap(u, v);
+//             m -= t * a, u -= t * v;
+//             swap(a, m), swap(u, v);
 //         }
 //         return gf(u);
 //     }
