@@ -53,6 +53,18 @@ void init_lca(int root) {
     }
 }
 
+// O(V)
+int calc_lca(int u, int v) {
+    if (dep[u] < dep[v]) swap(u, v);
+    while (dep[u] > dep[v]) {
+        u = par[u];
+    }
+    while (u != v) {
+        u = par[u], v = par[v];
+    }
+    return u;
+}
+
 int main() {
     init_lca(0);
     return 0;
