@@ -8,31 +8,33 @@ typedef pair<int, int> pii;
 typedef pair<ll, int> pli;
 
 #include <complex>
+typedef long double DD;
 
-struct Point : public complex<double> {
-    double x() const { return real(); }
-    void x(double val) { real(val); }
-    double y() const { return imag(); }
-    void y(double val) { imag(val); }
+struct Point : public complex<DD> {
+    DD x() const { return real(); }
+    void x(DD val) { real(val); }
+    DD y() const { return imag(); }
+    void y(DD val) { imag(val); }
     Point() {}
-    Point(double a, double b) {
+    Point(DD a, DD b) {
         x(a);
         y(b);
     }
-    Point(const complex<double> &p) {
+    Point(const complex<DD> &p) {
         x(p.real());
         y(p.imag());
     }
 };
 
-const double EPS = 1e-8;
-const double INF = 1e12;
+const DD EPS = 1e-8;
+const DD INF = 1LL << 60;
 
 bool operator<(const Point &a, const Point &b) {
     return a.x() != b.x() ? a.x() < b.x() : a.y() < b.y();
 }
-double cross(const Point &a, const Point &b) { return imag(conj(a) * b); }
-double dot(const Point &a, const Point &b) { return real(conj(a) * b); }
+DD cross(const Point &a, const Point &b) { return imag(conj(a) * b); }
+DD dot(const Point &a, const Point &b) { return real(conj(a) * b); }
+bool eq(const Point &p, const Point &q) { return abs(p - q) < EPS; }
 
 struct Line : public vector<Point> {
     Line(const Point &a, const Point &b) {
@@ -45,8 +47,8 @@ typedef vector<Point> Poly;
 
 struct Circle {
     Point p;
-    double r;
-    Circle(const Point &p, double r) : p(p), r(r) {}
+    DD r;
+    Circle(const Point &p, DD r) : p(p), r(r) {}
 };
 
 int ccw(Point a, Point b, Point c) {
@@ -81,38 +83,56 @@ bool intersectSP(const Line &s, const Point &p) {
 }
 
 Point projection(const Line &l, const Point &p) {
-    double t = dot(p - l[0], l[0] - l[1]) / norm(l[0] - l[1]);
+    DD t = dot(p - l[0], l[0] - l[1]) / norm(l[0] - l[1]);
     return l[0] + t * (l[0] - l[1]);
 }
 Point reflection(const Line &l, const Point &p) {
-    return p + 2.0 * (projection(l, p) - p);
+    return p + 2.0L * (projection(l, p) - p);
 }
-double distanceLP(const Line &l, const Point &p) {
+DD distanceLP(const Line &l, const Point &p) {
     return abs(p - projection(l, p));
 }
-double distanceLL(const Line &l, const Line &m) {
+DD distanceLL(const Line &l, const Line &m) {
     return intersectLL(l, m) ? 0 : distanceLP(l, m[0]);
 }
-double distanceLS(const Line &l, const Line &s) {
+DD distanceLS(const Line &l, const Line &s) {
     if (intersectLS(l, s)) return 0;
     return min(distanceLP(l, s[0]), distanceLP(l, s[1]));
 }
-double distanceSP(const Line &s, const Point &p) {
+DD distanceSP(const Line &s, const Point &p) {
     const Point r = projection(s, p);
     if (intersectSP(s, r)) return abs(r - p);
     return min(abs(s[0] - p), abs(s[1] - p));
 }
-double distanceSS(const Line &s, const Line &t) {
+DD distanceSS(const Line &s, const Line &t) {
     if (intersectSS(s, t)) return 0;
     return min(min(distanceSP(s, t[0]), distanceSP(s, t[1])),
                min(distanceSP(t, s[0]), distanceSP(t, s[1])));
 }
 Point crosspoint(const Line &l, const Line &m) {
-    double A = cross(l[1] - l[0], m[1] - m[0]);
-    double B = cross(l[1] - l[0], l[1] - m[0]);
+    DD A = cross(l[1] - l[0], m[1] - m[0]);
+    DD B = cross(l[1] - l[0], l[1] - m[0]);
     if (abs(A) < EPS && abs(B) < EPS) return m[0];  // same line
     if (abs(A) < EPS) assert(false);  // !!!PRECONDITION NOT SATISFIED!!!
     return m[0] + B / A * (m[1] - m[0]);
+}
+vector<Point> crosspoint(const Circle &e, const Circle &f) {
+    vector<Point> res;
+    DD d = abs(e.p - f.p);
+    if (d < EPS) return vector<Point>();
+    if (d > e.r + f.r + EPS) return vector<Point>();
+    if (d < abs(e.r - f.r) - EPS) return vector<Point>();
+    DD rcos = (d * d + e.r * e.r - f.r * f.r) / (2.0 * d), rsin;
+    if (e.r - abs(rcos) < EPS)
+        rsin = 0;
+    else
+        rsin = sqrt(e.r * e.r - rcos * rcos);
+    Point dir = (f.p - e.p) / d;
+    Point p1 = e.p + dir * Point(rcos, rsin);
+    Point p2 = e.p + dir * Point(rcos, -rsin);
+    res.push_back(p1);
+    if (!eq(p1, p2)) res.push_back(p2);
+    return res;
 }
 
 int main() { return 0; }
