@@ -84,4 +84,33 @@ private:
     }
 };
 
+template <typename T>
+class RMQMax {
+public:
+    int n;
+    vector<T> data;
+    RMQMax(int _n) {
+        n = 1;
+        while (n < _n) n <<= 1;
+        data.resize(2 * n - 1);
+    }
+    void update(int k, T a) {
+        k += n - 1;
+        data[k] = a;
+        while (k > 0) {
+            k = (k - 1) / 2;
+            data[k] = max(data[k * 2 + 1], data[k * 2 + 2]);
+        }
+    }
+    T query(int a, int b) { return query(a, b, 0, 0, n); }
+
+private:
+    T query(int a, int b, int k, int l, int r) {  // [a, b), [l, r)
+        if (r <= a || b <= l) return 0;
+        if (a <= l && r <= b) return data[k];
+        return max(query(a, b, k * 2 + 1, l, (l + r) / 2),
+                   query(a, b, k * 2 + 2, (l + r) / 2, r));
+    }
+};
+
 int main() { return 0; }
