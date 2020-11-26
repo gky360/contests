@@ -21,9 +21,9 @@ ll lcm(ll a, ll b) {
 /**
  * 約数列挙
  */
-vector<int> divisors(int n) {
-    vector<int> ret;
-    for (int i = 1; i * i <= n; i++) {
+vector<ll> divisors(ll n) {
+    vector<ll> ret;
+    for (ll i = 1; i * i <= n; i++) {
         if (n % i == 0) {
             ret.push_back(i);
             if (i * i != n) {
