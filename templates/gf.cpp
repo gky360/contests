@@ -22,7 +22,7 @@ class gf {
 public:
     int n;
     gf() : n(0) {}
-    gf(int n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
+    gf(ll n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
     gf operator+(gf x) { return gf((n + x.n) % MOD); }
     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
@@ -45,7 +45,7 @@ public:
 //         return gf(u);
 //     }
 //     gf() : n(0) {}
-//     gf(int n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
+//     gf(ll n) : n(n < 0 ? n % MOD + MOD : n % MOD) {}
 //     gf operator+(gf x) { return gf((n + x.n) % MOD); }
 //     gf operator-(gf x) { return gf((n - x.n + MOD) % MOD); }
 //     gf operator*(gf x) { return gf((1LL * n * x.n) % MOD); }
