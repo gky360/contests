@@ -66,6 +66,11 @@ gf combi(int n, int k) {
     //                                      : fact[n] / (fact[k] * fact[n - k]);
 }
 
+gf perm(int n, int k) {
+    return fact[n] * finv[n - k];
+    // return fact[n] / fact[n - k];
+}
+
 gf mod_pow(gf a, ll n) {
     gf ret = 1;
     for (; n > 0; n >>= 1) {
