@@ -6,6 +6,7 @@
 *.out.txt
 **/in/*.txt
 **/out/*.txt
+!*.sh
 !*.c
 !*.h
 !*.cpp
