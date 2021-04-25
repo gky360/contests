@@ -83,14 +83,10 @@ gf mod_pow(gf a, ll n) {
 int main() {
     // calc fact, finv
     fact[0] = 1;
-    for (int i = 1; i <= MAX_N; i++) {
-        fact[i] = fact[i - 1] * i;
-    }
+    for (int i = 1; i <= MAX_N; i++) fact[i] = fact[i - 1] * i;
     finv[MAX_N] = mod_inv(fact[MAX_N].n, MOD);
     // finv[MAX_N] = fact[MAX_N].inv();
-    for (int i = MAX_N; i > 0; i--) {
-        finv[i - 1] = finv[i] * i;
-    }
+    for (int i = MAX_N; i > 0; i--) finv[i - 1] = finv[i] * i;
 
     // calc fact, inv, finv
     fact[0] = fact[1] = 1;
