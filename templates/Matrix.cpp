@@ -17,26 +17,20 @@ const Number ONE = 1.0;
 
 Matrix identity(int n) {
     Matrix A(n, Array(n, ZERO));
-    for (int i = 0; i < n; i++) {
-        A[i][i] = ONE;
-    }
+    for (int i = 0; i < n; i++) A[i][i] = ONE;
     return A;
 }
 
 Number inner_product(const Array &a, const Array &b) {
     Number ans = ZERO;
-    for (int i = 0; i < (int)a.size(); i++) {
-        ans += a[i] * b[i];
-    }
+    for (int i = 0; i < (int)a.size(); i++) ans += a[i] * b[i];
     return ans;
 }
 
 Array mul(const Matrix &A, const Array &x) {
     Array y(A.size(), ZERO);
     for (int i = 0; i < (int)A.size(); i++) {
-        for (int j = 0; j < (int)x.size(); j++) {
-            y[i] += A[i][j] * x[j];
-        }
+        for (int j = 0; j < (int)x.size(); j++) y[i] += A[i][j] * x[j];
     }
     return y;
 }
@@ -57,9 +51,7 @@ Matrix pow(const Matrix &A, ll e) {
     Matrix AA = A;
     Matrix ans = identity(A.size());
     for (; e > 0; e >>= 1) {
-        if (e & 1) {
-            ans = mul(ans, AA);
-        }
+        if (e & 1) ans = mul(ans, AA);
         AA = mul(AA, AA);
     }
     return ans;
@@ -71,15 +63,12 @@ Number det(Matrix A) {
     for (int i = 0; i < n; i++) {
         int pivot = i;
         for (int j = i + 1; j < n; j++) {
-            if (abs(A[j][i]) > abs(A[pivot][i])) {
-                pivot = j;
-            }
+            if (abs(A[j][i]) > abs(A[pivot][i])) pivot = j;
         }
         swap(A[pivot], A[i]);
         D *= A[i][i] * (i != pivot ? -1 : 1);
-        if (abs(A[i][i]) <= EPS) {
-            break;
-        }
+        if (abs(A[i][i]) <= EPS) break;
+
         for (int j = i + 1; j < n; j++) {
             for (int k = n - 1; k >= i; k--) {
                 A[j][k] -= A[i][k] * A[j][i] / A[i][i];
@@ -91,9 +80,7 @@ Number det(Matrix A) {
 
 Number tr(const Matrix &A) {
     Number ans = ZERO;
-    for (int i = 0; i < (int)A.size(); ++i) {
-        ans += A[i][i];
-    }
+    for (int i = 0; i < (int)A.size(); ++i) ans += A[i][i];
     return ans;
 }
 
@@ -103,21 +90,15 @@ int mat_rank(Matrix A) {
     for (int i = 0; r < n && i < m; i++) {
         int pivot = r;
         for (int j = r + 1; j < n; j++) {
-            if (fabs(A[j][i]) > fabs(A[pivot][i])) {
-                pivot = j;
-            }
+            if (fabs(A[j][i]) > fabs(A[pivot][i])) pivot = j;
         }
         swap(A[pivot], A[r]);
-        if (fabs(A[r][i]) <= EPS) {
-            continue;
-        }
-        for (int k = m - 1; k >= i; k--) {
-            A[r][k] /= A[r][i];
-        }
+        if (fabs(A[r][i]) <= EPS) continue;
+
+        for (int k = m - 1; k >= i; k--) A[r][k] /= A[r][i];
+
         for (int j = r + 1; j < n; j++) {
-            for (int k = m - 1; k >= i; k--) {
-                A[j][k] -= A[r][k] * A[j][i];
-            }
+            for (int k = m - 1; k >= i; k--) A[j][k] -= A[r][k] * A[j][i];
         }
         r++;
     }
@@ -133,24 +114,16 @@ Matrix regularize(Matrix A) {
     for (int i = 0; r < n && i < m; i++) {
         int pivot = r;
         for (int j = r + 1; j < n; j++) {
-            if (fabs(A[j][i]) > fabs(A[pivot][i])) {
-                pivot = j;
-            }
+            if (fabs(A[j][i]) > fabs(A[pivot][i])) pivot = j;
         }
         swap(A[pivot], A[r]);
-        if (fabs(A[r][i]) <= EPS) {
-            continue;
-        }
-        for (int k = m - 1; k >= i; k--) {
-            A[r][k] /= A[r][i];
-        }
+        if (fabs(A[r][i]) <= EPS) continue;
+
+        for (int k = m - 1; k >= i; k--) A[r][k] /= A[r][i];
+
         for (int j = 0; j < n; j++) {
-            if (j == r) {
-                continue;
-            }
-            for (int k = m - 1; k >= i; k--) {
-                A[j][k] -= A[r][k] * A[j][i];
-            }
+            if (j == r) continue;
+            for (int k = m - 1; k >= i; k--) A[j][k] -= A[r][k] * A[j][i];
         }
         r++;
     }
